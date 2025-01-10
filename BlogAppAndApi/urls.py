@@ -16,10 +16,22 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path,include
 from blog.views import index
+from blog.api_views import *
+from rest_framework.routers import DefaultRouter
+from django.conf.urls.static import static
+from django.conf import settings
 
+
+router=DefaultRouter()
+# router.register(r'listpost',PostListSet,basename="listpost")
+# router.register(r'updatepost',PostUpdateSet,basename="updatepost")
+# router.register(r'deletepost',PostDeleteSet,basename="deletepost")
+router.register(r'posts',PostViewSet,basename='postsView')
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('',index),
     path('blog/',include('blog.urls')),
+    path('api/',include(router.urls)),
 ]
+urlpatterns+=static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)

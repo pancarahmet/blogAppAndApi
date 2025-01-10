@@ -3,11 +3,39 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>{{post.title}}</title>
 </head>
 <body>
-    <h1>Buraya Post detayı gelicek {{post.title}}</h1>
-    <a href="{% url 'postDelete' post.id %}">Sil</a> - 
-    <a href="{% url 'deleteDeneme' %}">Sil2</a>
+    <h1>{{post.title}}</h1>
+    <p>{{post.comment}}</p>
+    <div>
+        {% if post.resim %}
+        <img src="{{post.resim.url}}" alt="">
+        {% else %}
+        <p>Resim Yok</p>
+        {% endif %}
+    </div>
+    <p>Yazar: {{post.author}}</p>
+    <p>Oluşturma: {{post.created_at}}</p>
+
+    <hr>
+
+    <h2>Yorumlar</h2>
+    {% for comment in comments %}
+    <div>
+        <strong>{{comment.author}}:</strong>
+        <div><p>{{comment.comment}}</p></div>
+        <p><small>{{comment.created_at}}</small></p>
+    </div>
+    {% empty %}
+    <p>Henüz Yorum Yok</p>
+    {% endfor %}
+    <hr>
+    <h2>Yorum Ekle</h2>
+    <form method="post">
+        {% csrf_token %}
+        {{comment_form.as_p}}
+        <button type="submit">Gönder</button>
+    </form>
 </body>
 </html>
